@@ -23,6 +23,11 @@
     "pricing": "https://gpt55.558686.xyz/pricing.json",
     "x402": "https://gpt55.558686.xyz/.well-known/x402",
     "buyerGuide": "https://gpt55.558686.xyz/buyer-guide.json",
-    "execution": "direct_x402_http"
+    "execution": "direct_x402_http",
+    "publicRepository": "https://github.com/go165/gpt55-x402-gateway"
+  },
+  "repository": {
+    "url": "https://github.com/go165/gpt55-x402-gateway",
+    "source": "github"
   }
 }
