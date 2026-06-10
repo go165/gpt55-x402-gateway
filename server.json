@@ -1,0 +1,28 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "xyz.558686.gpt55/token-gateway",
+  "title": "GPT-5.5 x402 Low Cost Agent Tools",
+  "description": "Remote MCP and OpenAI-compatible GPT-5.5 gateway with x402 USDC settlement on Base. Compact chat is $0.0001, long chat is $0.002134, max-output chat is $0.066667, and utility tools are $0.0001.",
+  "version": "1.0.0",
+  "websiteUrl": "https://gpt55.558686.xyz",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://gpt55.558686.xyz/mcp"
+    },
+    {
+      "type": "sse",
+      "url": "https://gpt55.558686.xyz/mcp/sse"
+    }
+  ],
+  "_meta": {
+    "protocol": "x402",
+    "network": "eip155:8453",
+    "asset": "USDC",
+    "openapi": "https://gpt55.558686.xyz/openapi.json",
+    "pricing": "https://gpt55.558686.xyz/pricing.json",
+    "x402": "https://gpt55.558686.xyz/.well-known/x402",
+    "buyerGuide": "https://gpt55.558686.xyz/buyer-guide.json",
+    "execution": "direct_x402_http"
+  }
+}
