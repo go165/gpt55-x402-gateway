@@ -1,4 +1,61 @@
+import { spawn } from "node:child_process";
+
 const baseUrl = process.env.SMOKE_BASE_URL || "http://127.0.0.1:3000";
+let serverProcess;
+
+async function sleep(ms) {
+  await new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function waitForHealth() {
+  const deadline = Date.now() + 10_000;
+  let lastError;
+  while (Date.now() < deadline) {
+    try {
+      const response = await fetch(`${baseUrl}/health`);
+      if (response.ok) return;
+      lastError = new Error(`health status ${response.status}`);
+    } catch (error) {
+      lastError = error;
+    }
+    await sleep(250);
+  }
+  throw lastError || new Error("server did not become healthy");
+}
+
+async function ensureServer() {
+  if (process.env.SMOKE_BASE_URL) return;
+  try {
+    const response = await fetch(`${baseUrl}/health`);
+    if (response.ok) return;
+  } catch {
+    // Start a temporary local server below.
+  }
+  serverProcess = spawn(process.execPath, ["server.mjs"], {
+    cwd: new URL(".", import.meta.url),
+    env: { ...process.env, HOST: "127.0.0.1", PORT: "3000" },
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+  serverProcess.stdout.on("data", (chunk) => process.stdout.write(chunk));
+  serverProcess.stderr.on("data", (chunk) => process.stderr.write(chunk));
+  await waitForHealth();
+}
+
+function stopServer() {
+  if (serverProcess && !serverProcess.killed) {
+    serverProcess.kill("SIGTERM");
+  }
+}
+
+process.on("exit", stopServer);
+process.on("SIGINT", () => {
+  stopServer();
+  process.exit(130);
+});
+process.on("SIGTERM", () => {
+  stopServer();
+  process.exit(143);
+});
 
 async function assertOk(name, fn) {
   try {
@@ -10,6 +67,8 @@ async function assertOk(name, fn) {
     process.exitCode = 1;
   }
 }
+
+await ensureServer();
 
 await assertOk("health", async () => {
   const response = await fetch(`${baseUrl}/health`);
@@ -56,3 +115,5 @@ await assertOk("mcp_tools_list", async () => {
   const tools = payload.result?.tools;
   if (!Array.isArray(tools) || tools.length < 1) throw new Error("tools/list returned no tools");
 });
+
+stopServer();
