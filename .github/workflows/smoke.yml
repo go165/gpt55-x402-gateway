@@ -1,0 +1,30 @@
+name: Smoke
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: Node smoke and Docker build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run MCP smoke test
+        run: npm run smoke
+
+      - name: Build Docker image
+        run: docker build -t gpt55-x402-gateway:ci .
