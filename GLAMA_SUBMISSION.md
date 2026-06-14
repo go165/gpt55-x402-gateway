@@ -56,6 +56,20 @@ mcp_initialize=ok
 mcp_tools_list=ok
 ```
 
+Public CI evidence:
+
+```text
+https://github.com/go165/gpt55-x402-gateway/actions/workflows/smoke.yml
+```
+
+Latest verified CI run at packet update time:
+
+```text
+https://github.com/go165/gpt55-x402-gateway/actions/runs/27500511035
+```
+
+That workflow runs `npm run smoke` and `docker build -t gpt55-x402-gateway:ci .` on GitHub-hosted Ubuntu runners.
+
 Optional Docker command for the Glama form or local validation:
 
 ```bash
