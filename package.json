@@ -1,0 +1,14 @@
+{
+  "name": "gpt55-x402-gateway-listing",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Glama-compatible local wrapper for the public GPT-5.5 x402 MCP gateway.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "smoke": "node smoke.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

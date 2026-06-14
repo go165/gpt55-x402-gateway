@@ -69,6 +69,33 @@ curl -i https://gpt55.558686.xyz/v1/chat/completions \
 
 Expected unauthenticated response: HTTP `402` with a `payment-required` header containing Base USDC x402 payment requirements.
 
+## Glama / Docker Smoke
+
+This repository includes a small no-secret Docker wrapper for directory checks such as Glama. It starts a local Streamable HTTP MCP endpoint at `/mcp`, proxies to the public remote MCP endpoint when available, and falls back to local introspection responses for `initialize`, `tools/list`, `resources/list`, and `prompts/list`.
+
+The wrapper does not handle private keys, wallet signatures, KYC, JWTs, custody, or paid execution. Paid calls still happen through the public x402 HTTP endpoints advertised by the live gateway.
+
+Run locally:
+
+```bash
+npm start
+```
+
+In another shell:
+
+```bash
+npm run smoke
+```
+
+Build and run with Docker:
+
+```bash
+docker build -t gpt55-x402-gateway .
+docker run --rm -p 3000:3000 gpt55-x402-gateway
+```
+
+Then submit the repository to Glama using the Dockerfile in this repo. After Glama creates a public server page and score badge, update directory PRs with the generated badge URL.
+
 ## Local Commands
 
 ```powershell
